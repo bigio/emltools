@@ -46,7 +46,7 @@ while (my $email = readdir( DIR )) {
 		next;
 	}
 
-	io($email) > $message;
+	io($dir . "/" . $email) > $message;
 
 	my $parser = MIME::Parser->new;
 	$parser->output_to_core(1);
