@@ -58,6 +58,8 @@ while (my $email = readdir( DIR )) {
 	$mfrom =~ s/(.*)\<//g;
 	$mfrom =~ s/\>(.*)//g;
 
-	print $mfrom . " " . $score . "\n";
+	if ( $mfrom =~ /\@/ ) {
+		print $mfrom . " " . $score . "\n";
+	}
 }
 closedir(DIR);
