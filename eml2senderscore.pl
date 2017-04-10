@@ -55,10 +55,11 @@ while (my $email = readdir( DIR )) {
 
 	my $mfrom = $entity->head->get('From');
 	chomp($mfrom);
+	$mfrom =~ s/\n//g;
 	$mfrom =~ s/(.*)\<//g;
 	$mfrom =~ s/\>(.*)//g;
 
-	if ( $mfrom =~ /\@/ ) {
+	if ( $mfrom =~ /(.*)\@(.*)/ ) {
 		print $mfrom . " " . $score . "\n";
 	}
 }
