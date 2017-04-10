@@ -38,8 +38,13 @@ my $count;
 my $hdr;
 my @a_hdr;
 my %headers;
+my $key;
 
 my $dir = $ARGV[0];
+
+sub hashValueAscendingNum {
+   $headers{$a} <=> $headers{$b};
+}
 
 opendir(DIR, $dir) or die "Could not open '$dir' for reading: $!\n";
 
@@ -73,5 +78,10 @@ while (my $email = readdir( DIR )) {
 		}
 	}
 }
-print Dumper %headers;
+# print Dumper %headers;
+my @keys = sort { $headers{$b} <=> $headers{$a} } keys %headers;
+foreach my $key ( @keys )
+{
+  print "$key $headers{$key}\n";
+}
 closedir(DIR);
