@@ -37,17 +37,30 @@ use IO::All;
 my $message;
 my %opts = ();
 my $domains = 0;
+my $domain_last = 0;
 my %afrom;
 my %afromcount;
 
-getopts('dh', \%opts);
+getopts('dhl', \%opts);
 my $dir = shift;
-if ( ( defined $opts{'h'} ) || ( not defined $dir ) ) {
-	print "Usage: emldomains.pl [-d] dir\n";
+
+sub usage {
+	print "Usage: emldomains.pl [-dhl] dir\n";
 	exit;
+}
+
+if ( ( defined $opts{'h'} ) || ( not defined $dir ) ) {
+	usage;
 }
 if ( defined $opts{'d'} ) {
 	$domains = 1;
+}
+if ( defined $opts{'l'} ) {
+	$domain_last = 1;
+}
+if ( ( $domains eq 1 ) && ( $domain_last eq 1 ) ) {
+	print "Cannot use both -d and -l\n";
+	usage;
 }
 
 opendir(DIR, $dir) or die "Could not open '$dir' for reading: $!\n";
@@ -77,6 +90,14 @@ while (my $email = readdir( DIR )) {
 			$afrom{$mfrom} = $mfrom;
 			$afromcount{$mfrom}++;
 		}
+	} elsif ( $domain_last ) {
+		if ( $mfrom =~ /(.*)\@(.*)/ ) {
+			$mfrom =~ s/(.*)\@//;
+			$mfrom = ( split(/\./, $mfrom) )[-1];
+			$afrom{$mfrom} = $mfrom;
+			$afromcount{$mfrom}++;
+		}
+
 	} elsif ( $mfrom =~ /(.*)\@(.*)/ ) {
 		$afrom{$mfrom} = $mfrom;
 		$afromcount{$mfrom}++;
