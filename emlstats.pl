@@ -33,6 +33,7 @@ use MIME::Parser;
 use Data::Dumper;
 use IO::All;
 
+my $domain = 0;
 my $message;
 my $count;
 my $hdr;
@@ -40,7 +41,11 @@ my @a_hdr;
 my %headers;
 my $key;
 
-my $dir = $ARGV[0];
+my $dir = shift;
+if ( not defined $dir ) {
+        print "Usage: emlstats.pl dir\n";
+        exit;
+}
 
 opendir(DIR, $dir) or die "Could not open '$dir' for reading: $!\n";
 
