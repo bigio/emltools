@@ -34,6 +34,7 @@ use Data::Dumper;
 use IO::All;
 
 my $message;
+my %afrom;
 my $score = 2.0;
 
 my $dir = $ARGV[0];
@@ -60,7 +61,12 @@ while (my $email = readdir( DIR )) {
 	$mfrom =~ s/\>(.*)//g;
 
 	if ( $mfrom =~ /(.*)\@(.*)/ ) {
-		print $mfrom . " " . $score . "\n";
+		$afrom{$mfrom} = $mfrom;
 	}
 }
 closedir(DIR);
+
+my @keys = sort { $afrom{$a} cmp $afrom{$b} } keys %afrom;
+foreach my $key ( @keys ) {
+        print "$key $score\n";
+}
